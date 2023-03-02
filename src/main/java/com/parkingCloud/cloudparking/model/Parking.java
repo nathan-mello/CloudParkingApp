@@ -24,6 +24,10 @@ public class Parking {
         this.bill = 0.00;
     }
 
+    public Parking() {
+
+    }
+
     public String getId() {
         return id;
     }

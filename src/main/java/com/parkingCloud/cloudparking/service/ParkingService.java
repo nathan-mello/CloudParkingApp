@@ -17,6 +17,10 @@ public class ParkingService {
         var id = getUUID();
         Parking parking = new Parking(id, "MS-123", "SP", "Fiat polo", "red",LocalDateTime.now());
         parkingMap.put(id, parking);
+
+        var id1 = getUUID();
+        Parking parking1 = new Parking(id1, "785btd", "MT", "celta", "verde",LocalDateTime.now());
+        parkingMap.put(id1, parking1);
     }
 
     private static String  getUUID(){
@@ -28,4 +32,17 @@ public class ParkingService {
         return parkingMap.values().stream().collect(Collectors.toList());
     }
 
+    public Parking findById(String id) {
+        return parkingMap.get(id);
+    }
+
+    public Parking create(Parking parkingCreate) {
+        String uuid = getUUID();
+        parkingCreate.setId(uuid);
+        parkingCreate.setEntryDate(LocalDateTime.now());
+
+        parkingMap.put(uuid, parkingCreate);
+        return parkingCreate;
+
+    }
 }
