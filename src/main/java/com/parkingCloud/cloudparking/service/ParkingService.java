@@ -1,5 +1,6 @@
 package com.parkingCloud.cloudparking.service;
 
+import com.parkingCloud.cloudparking.exception.ParkingNotFoundException;
 import com.parkingCloud.cloudparking.model.Parking;
 import org.springframework.core.annotation.MergedAnnotationPredicates;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,6 @@ public class ParkingService {
         var id = getUUID();
         Parking parking = new Parking(id, "MS-123", "SP", "Fiat polo", "red",LocalDateTime.now());
         parkingMap.put(id, parking);
-
-        var id1 = getUUID();
-        Parking parking1 = new Parking(id1, "785btd", "MT", "celta", "verde",LocalDateTime.now());
-        parkingMap.put(id1, parking1);
     }
 
     private static String  getUUID(){
@@ -33,7 +30,11 @@ public class ParkingService {
     }
 
     public Parking findById(String id) {
-        return parkingMap.get(id);
+        Parking parking = parkingMap.get(id);
+        if(parking == null){
+            throw new ParkingNotFoundException(id);
+        }
+        return parking;
     }
 
     public Parking create(Parking parkingCreate) {
@@ -44,5 +45,18 @@ public class ParkingService {
         parkingMap.put(uuid, parkingCreate);
         return parkingCreate;
 
+    }
+
+    public void delete(String id) {
+        findById(id);
+        parkingMap.remove(id);
+    }
+
+    public Parking update(String id, Parking parkingCreate) {
+        Parking parking = findById(id);
+        parking.setColor(parkingCreate.getColor());
+        parking.setModel(parkingCreate.getModel());
+        parkingMap.replace(id, parking);
+        return parking;
     }
 }
